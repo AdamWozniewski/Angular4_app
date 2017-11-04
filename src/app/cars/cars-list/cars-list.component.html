@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-12">
-      <table *ngIf="cars.length > 5; else noCarsInfo" class="cs-table table table-striped">
+      <table *ngIf="cars.length > 0; else noCarsInfo" class="cs-table table table-striped">
         <thead>
           <tr>
             <th>car</th>
@@ -32,4 +32,18 @@
       </ng-template>
     </div>
   </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <button (click)="this.showGrossFromParentComponent()" class="btn btn-primary btn-sm float-right">Kwota Brutto przez referencję</button>
+    </div>
+  </div>
+  <app-total-cost #totalCostRef [totalCost]="this.totalCost" (shownGross)="this.onShowGrossFromTotalCost($event)"></app-total-cost>
+  <div class="row" *ngIf="this.grossShown">
+    <div class="col-sm-12">
+      <div class="total-cost">
+        <p class="text-right">Kwota brutto {{this.grossShown}}</p>
+      </div>
+    </div>
+  </div>
+
 </div>
