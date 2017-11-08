@@ -1,7 +1,11 @@
+<app-header>
+  <p levels>cars</p>
+  <div content>text</div>
+</app-header>
 <div class="container">
   <div class="row">
     <div class="col-sm-12">
-      <table *ngIf="cars.length > 0; else noCarsInfo" class="cs-table table table-striped">
+      <table *ngIf="cars && cars.length > 0; else noCarsInfo" class="cs-table table table-striped">
         <thead>
           <tr>
             <th>car</th>
@@ -15,12 +19,12 @@
         </thead>
         <tbody>
           <tr *ngFor="let car of this.cars; let i = index">
-            <td [ngClass]="{'row-error': car.isFullyDamaged === true}">{{car.model}}</td>
-            <td>{{car.plate}}</td>
-            <td>{{car.deliveryDate}}</td>
-            <td>{{car.deadline}}</td>
-            <td>{{car.client.firstName}} {{car.client.surname}}</td>
-            <td>{{car.cost}}</td>
+            <td [ngClass]="{'row-error': car.isFullyDamaged === true}">{{car?.model}}</td>
+            <td>{{car?.plate}}</td>
+            <td>{{car?.deliveryDate}}</td>
+            <td>{{car?.deadline}}</td>
+            <td>{{car?.clientFirstName}} {{car?.clientSurname}}</td>
+            <td>{{car?.cost}}</td>
             <td>Action placeholder</td>
           </tr>
         </tbody>
