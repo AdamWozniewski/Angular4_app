@@ -11,9 +11,15 @@ export class CarsServiceService {
   random = Math.random();
   constructor(private http: Http) {}
 
-    getCars() : Observable<Cars[]> {
+    getCars(): Observable<Cars[]> {
         return this.http
             .get(this.upiUrl)
-            .map((res) => res.json())
+            .map((res) => res.json());
+    }
+
+    getOneCar(id: number): Observable<Cars> {
+        return this.http
+            .get(`${this.upiUrl}/${id}`)
+            .map((res) => res.json());
     }
 }

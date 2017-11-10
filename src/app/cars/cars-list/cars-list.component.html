@@ -1,6 +1,6 @@
 <app-header>
-  <p levels>cars</p>
-  <div content>text</div>
+  <p levels>Cars</p>
+  <div content>Lista samochodów w serwisie</div>
 </app-header>
 <div class="container">
   <div class="row">
@@ -18,7 +18,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let car of this.cars; let i = index">
+          <tr class="row-car" *ngFor="let car of this.cars; let i = index" (click)="goToCar(car)">
             <td [ngClass]="{'row-error': car.isFullyDamaged === true}">{{car?.model}}</td>
             <td>{{car?.plate}}</td>
             <td>{{car?.deliveryDate}}</td>

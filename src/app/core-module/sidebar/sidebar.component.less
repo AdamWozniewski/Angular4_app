@@ -1,0 +1,41 @@
+@import '../../../assets/styles/variables';
+
+.sidebar {
+  width: 180px;
+  background-color: @blue;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+
+  .logo {
+    margin: 30px auto;
+    width: 120px;
+    display: block;
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 0;
+
+    li {
+      text-transform: uppercase;
+      font-weight: 700;
+      cursor: pointer;
+      color: @white;
+      padding: 10px;
+      border-bottom: 1px solid @white;
+      &:hover {
+        background-color: #10447d;
+        -webkit-transition: linear 300ms;
+        -moz-transition: linear 300ms;
+        -ms-transition: linear 300ms;
+        -o-transition: linear 300ms;
+        transition: linear 300ms;
+      }
+    }
+
+    li.active {
+      background-color: @cyan;
+    }
+  }
+}
