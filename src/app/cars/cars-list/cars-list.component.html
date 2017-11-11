@@ -42,6 +42,7 @@
     </div>
   </div>
   <app-total-cost #totalCostRef [totalCost]="this.totalCost" (shownGross)="this.onShowGrossFromTotalCost($event)"></app-total-cost>
+
   <div class="row" *ngIf="this.grossShown">
     <div class="col-sm-12">
       <div class="total-cost">
@@ -50,4 +51,78 @@
     </div>
   </div>
 
+  <p class="data-header">Dodaj Nowy samochod</p>
+  <div class="data-container">
+    <form [formGroup]="this.carForm">
+      <div class="row form-group">
+        <div class="col-sm-4">
+          <label>Model</label>
+          <input formControlName="model" type="text" class="form-control" placeholder="Model">
+          <p *ngIf="!this.carForm.get('model').valid && this.carForm.get('model').dirty" class="error">To pole jest wymagane !</p>
+        </div>
+        <div class="col-sm-4">
+          <label>Typ</label>
+          <input formControlName="type" type="text" class="form-control" placeholder="Typ">
+        </div>
+        <div class="col-sm-4">
+          <label>Plate</label>
+          <input formControlName="plate" type="text" class="form-control" placeholder="Plate">
+          <p *ngIf="!this.carForm.get('plate').valid  && this.carForm.get('plate').dirty" class="error">To pole jest wymagane i musi mieć od 3 do 7 znaków !</p>
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-sm-4">
+          <label>Delivery Date</label>
+          <input formControlName="deliveryDate" type="text" class="form-control" placeholder="Delivery Date">
+        </div>
+        <div class="col-sm-4">
+          <label>Dead Line</label>
+          <input formControlName="deadline" type="text" class="form-control" placeholder="Dead Line">
+        </div>
+        <div class="col-sm-4">
+          <label>Kolor</label>
+          <input formControlName="color" type="text" class="form-control" placeholder="Kolor">
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-sm-4">
+          <label>Moc</label>
+          <input formControlName="power" type="text" class="form-control" placeholder="Moc">
+        </div>
+        <div class="col-sm-4">
+          <label>Imię Właściciela</label>
+          <input formControlName="clientFirstName" type="text" class="form-control" placeholder="Imię">
+        </div>
+        <div class="col-sm-4">
+          <label>Nazwisko Właściciela</label>
+          <input formControlName="clientSurname" type="text" class="form-control" placeholder="Nazwisko">
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-sm-4">
+          <label>Koszt</label>
+          <input formControlName="cost" type="text" class="form-control" placeholder="Koszt">
+        </div>
+        <div class="col-sm-4">
+          <label>Rocznik</label>
+          <input formControlName="year" type="text" class="form-control" placeholder="Rocznik">
+        </div>
+        <div class="col-sm-4">
+          <label>
+            Uszkodzony
+            <input formControlName="isFullyDamaged" type="checkbox" class="form-control">
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <button type="submit" class="btn btn-primary float-right" [disabled]="this.carForm.invalid" (click)="this.sendAddingCar()">Dodaj Samochód</button>
+          <button (click)="this.carForm.reset()" class="btn btn-danger float-right">Wyczyść</button>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>

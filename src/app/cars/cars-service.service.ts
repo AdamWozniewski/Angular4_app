@@ -22,4 +22,16 @@ export class CarsServiceService {
             .get(`${this.upiUrl}/${id}`)
             .map((res) => res.json());
     }
+
+    addCar(data): Observable<Cars> {
+        return this.http
+            .post(this.upiUrl, data)
+            .map((res) => res.json());
+    }
+
+    updateCar(id: number, data): Observable<Cars> {
+        return this.http
+            .put(`${this.upiUrl}/${id}`, data)
+            .map((res) => res.json());
+    }
 }

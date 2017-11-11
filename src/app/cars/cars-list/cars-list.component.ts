@@ -3,6 +3,7 @@ import { Cars } from '../models/car';
 import { TotalCostComponent } from '../total-cost/total-cost.component';
 import { CarsServiceService } from '../cars-service.service';
 import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-cars-list',
   templateUrl: './cars-list.component.html',
@@ -14,7 +15,12 @@ export class CarsListComponent implements OnInit, AfterViewInit {
     totalCost: number;
     grossShown: number;
     cars: Cars[] = [];
-    constructor(private carsService: CarsServiceService, private router: Router) {
+    carForm: FormGroup;
+    constructor(
+        private carsService: CarsServiceService,
+        private router: Router,
+        private formBuilder: FormBuilder
+    ) {
       // wykonywany jeszcze przed budowaniem komponentu, gdy nie ma wartosci
         console.log(carsService.random, '   CarsListComponent');
     }
@@ -39,8 +45,31 @@ export class CarsListComponent implements OnInit, AfterViewInit {
     goToCar(car: Cars) {
         this.router.navigate( ['/cars', car.id]);
     }
+    buildCarForm() {
+        return this.formBuilder.group({
+            model: ['', [Validators.required]],
+            type: '',
+            plate: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(7)]],
+            deliveryDate: '',
+            deadline: '',
+            color: '',
+            power: '',
+            clientFirstName: '',
+            clientSurname: '',
+            cost: '',
+            isFullyDamaged: '',
+            year: ''
+        });
+    }
+    sendAddingCar() {
+        this.carsService.addCar(this.carForm.value).subscribe(() => {
+            this.loadCars();
+            this.carForm.reset();
+        });
+    }
     ngOnInit() {
         this.loadCars();
+        this.carForm = this.buildCarForm();
     }
     ngAfterViewInit() {
         // this.showGross();
