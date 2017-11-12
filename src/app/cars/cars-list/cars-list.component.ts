@@ -61,6 +61,12 @@ export class CarsListComponent implements OnInit, AfterViewInit {
             year: ''
         });
     }
+    removeCar(car: Cars, event) {
+        event.stopPropagation();
+        this.carsService.deleteOneCar(car.id).subscribe(() => {
+            this.loadCars();
+        });
+    }
     sendAddingCar() {
         this.carsService.addCar(this.carForm.value).subscribe(() => {
             this.loadCars();

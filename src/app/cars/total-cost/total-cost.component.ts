@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { CarsServiceService } from '../cars-service.service';
 
 @Component({
   selector: 'app-total-cost',
   templateUrl: './total-cost.component.html',
   styleUrls: ['./total-cost.component.less'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [CarsServiceService],
 })
 export class TotalCostComponent {
