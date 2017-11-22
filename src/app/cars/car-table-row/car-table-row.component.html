@@ -1,0 +1,7 @@
+<td [ngClass]="{'row-error': this.car.isFullyDamaged === true}" appImportant>{{car?.model | uppercase}}</td>
+<td>{{this.car?.plate}}</td>
+<td>{{this.car?.deliveryDate | date:'shortDate'}}</td>
+<td>{{this.car?.deadline | date:'shortDate'}}</td>
+<td>{{car?.clientFirstName}} {{this.car?.clientSurname | surnameShortcut}}</td>
+<td appImportant>{{this.car?.cost | currency:'PLN':true}}</td>
+<td (click)="this.removeCar(this.car, $event)"> (X) </td>

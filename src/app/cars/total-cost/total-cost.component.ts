@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import { CarsServiceService } from '../cars-service.service';
 
 @Component({
@@ -8,14 +8,21 @@ import { CarsServiceService } from '../cars-service.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [CarsServiceService],
 })
-export class TotalCostComponent {
+export class TotalCostComponent implements OnChanges {
   @Input() totalCost: number;
   @Output() shownGross: EventEmitter<number> = new EventEmitter<number>();
   private VAT: number = 1.23;
 
+  costTreshold: number = 10000;
+  isCostToLow: boolean = false;
   constructor(private carsService: CarsServiceService) {}
 
   showGross(): void {
     this.shownGross.emit(this.totalCost * this.VAT);
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.isCostToLow = changes['totalCost'].currentValue < this.costTreshold;
+  }
+
 }

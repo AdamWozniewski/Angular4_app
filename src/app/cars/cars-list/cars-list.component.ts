@@ -1,9 +1,11 @@
-import { AfterViewInit, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import {AfterViewInit, Component, OnInit, QueryList, ViewChild, ViewChildren, ViewEncapsulation} from '@angular/core';
 import { Cars } from '../models/car';
 import { TotalCostComponent } from '../total-cost/total-cost.component';
 import { CarsServiceService } from '../cars-service.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {CostSharedService} from "../cost-shared.service";
+import {CarTableRowComponent} from "../car-table-row/car-table-row.component";
 @Component({
   selector: 'app-cars-list',
   templateUrl: './cars-list.component.html',
@@ -12,12 +14,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class CarsListComponent implements OnInit, AfterViewInit {
     @ViewChild('totalCostRef') totalCostRef: TotalCostComponent;
+    @ViewChildren(CarTableRowComponent) carRows: QueryList<CarTableRowComponent>;
     totalCost: number;
     grossShown: number;
     cars: Cars[] = [];
     carForm: FormGroup;
     constructor(
         private carsService: CarsServiceService,
+        private costService: CostSharedService,
         private router: Router,
         private formBuilder: FormBuilder
     ) {
@@ -28,6 +32,7 @@ export class CarsListComponent implements OnInit, AfterViewInit {
         this.carsService.getCars().subscribe((cars) => {
             this.cars = cars;
             this.countTotalCost();
+            this.costService.sharedCost(this.totalCost);
         });
     }
     countTotalCost(): void {
@@ -61,7 +66,7 @@ export class CarsListComponent implements OnInit, AfterViewInit {
             year: ''
         });
     }
-    removeCar(car: Cars, event) {
+    onRemoveCar(car: Cars) {
         event.stopPropagation();
         this.carsService.deleteOneCar(car.id).subscribe(() => {
             this.loadCars();
@@ -78,6 +83,10 @@ export class CarsListComponent implements OnInit, AfterViewInit {
         this.carForm = this.buildCarForm();
     }
     ngAfterViewInit() {
-        // this.showGross();
+        this.carRows.changes.subscribe(row => {
+            if (this.carRows.first.car.clientSurname === 'Kowalski') {
+                console.log('kolejny w kolejce: Kowalski');
+            }
+        });
     }
 }

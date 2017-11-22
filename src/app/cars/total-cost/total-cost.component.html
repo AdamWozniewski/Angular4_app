@@ -3,8 +3,12 @@
         <div class="total-cost">
             <button (click)="this.showGross()" class="btn btn-primary btn-sm float-left">Kwota Brutto komponent total-cost</button>
             <p class="text-right">
+                <span *ngIf="this.isCostToLow" class="cost-warning">
+                    Uwaga ! Kwota jest niższa niż {{this.costTreshold}} !
+                </span>
                 Całkowity koszt: {{ totalCost }} plnów
             </p>
+            <app-income-tax></app-income-tax>
         </div>
     </div>
 </div>
