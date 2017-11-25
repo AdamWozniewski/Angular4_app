@@ -5,7 +5,7 @@ import {Cars} from '../models/car';
   selector: '[app-car-table-row]',
   templateUrl: './car-table-row.component.html'
 })
-export class CarTableRowComponent implements OnInit{
+export class CarTableRowComponent implements OnInit {
   @Input() car: Cars;
   @Output() removedCar = new EventEmitter();
 
@@ -13,7 +13,6 @@ export class CarTableRowComponent implements OnInit{
     event.stopPropagation();
     this.removedCar.emit(car);
   }
-  ngOnInit(){
-    console.log(this.car);
+  ngOnInit() {
   }
 }

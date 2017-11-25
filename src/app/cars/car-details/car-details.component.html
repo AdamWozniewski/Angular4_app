@@ -55,10 +55,6 @@
 
     <div class="row form-group">
       <div class="col-sm-4">
-        <label>Koszt</label>
-        <input formControlName="cost" type="text" class="form-control" placeholder="Koszt">
-      </div>
-      <div class="col-sm-4">
         <label>Rocznik</label>
         <input formControlName="year" type="text" class="form-control" placeholder="Rocznik">
       </div>
@@ -69,6 +65,37 @@
         </label>
       </div>
     </div>
+
+    <div formArrayName="parts" *ngFor="let part of this.parts.controls; let i = index">
+      <div [formGroupName]="i" class="part-group">
+        <div class="row">
+          <div class="col-sm-12">
+            <h5>
+              {{i + 1}} {{part.value.name}} {{part.value.price | currency:'PLN':true}}
+              <span (click)="this.removePart(i)" class="btn btn-danger float-right">X</span>
+            </h5>
+          </div>
+        </div>
+        <div  class="row form-group part-group">
+          <div class="col-sm-4">
+            <label>Nazwa części</label>
+            <input formControlName="name" type="text" class="form-control" placeholder="Nazwa części" />
+          </div>
+          <div class="col-sm-4">
+            <label>Cena</label>
+            <input formControlName="price" type="number" class="form-control" placeholder="Cena"/>
+          </div>
+          <div class="col-sm-4">
+            <label>Czy jest na stanie
+              <input formControlName="inStock" type="checkbox" class="form-control" />
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-primary" (click)="addPart()" >Dodaj część</button>
+
+
     <div class="row">
       <div class="col-sm-12">
         <button type="submit" class="btn btn-primary float-right" [disabled]="this.carForm.invalid" (click)="this.updateCar()">Zaktualizuj Samochód</button>

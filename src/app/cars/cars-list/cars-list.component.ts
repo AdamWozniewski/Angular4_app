@@ -3,9 +3,10 @@ import { Cars } from '../models/car';
 import { TotalCostComponent } from '../total-cost/total-cost.component';
 import { CarsServiceService } from '../cars-service.service';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CostSharedService} from "../cost-shared.service";
 import {CarTableRowComponent} from "../car-table-row/car-table-row.component";
+import {PowerValidators} from "../../shared-module/validators/validators";
 @Component({
   selector: 'app-cars-list',
   templateUrl: './cars-list.component.html',
@@ -58,13 +59,40 @@ export class CarsListComponent implements OnInit, AfterViewInit {
             deliveryDate: '',
             deadline: '',
             color: '',
-            power: '',
+            power: ['', PowerValidators.power],
             clientFirstName: '',
             clientSurname: '',
-            cost: '',
             isFullyDamaged: '',
-            year: ''
+            year: '',
+            parts: this.formBuilder.array([])
         });
+    }
+    buildParts(): FormGroup {
+        return this.formBuilder.group({
+            name: '',
+            inStock: true,
+            price: ''
+        });
+    }
+    get parts(): FormArray {
+        return <FormArray>this.carForm.get('parts');
+    }
+    addPart(): void {
+        this.parts.push(this.buildParts());
+    }
+    removePart(index: number): void {
+        this.parts.removeAt(index);
+    }
+    togglePlateValidate() {
+        const damageControl = this.carForm.get('isFullyDamaged');
+        const plateControle = this.carForm.get('plate');
+
+        if (damageControl.value === true) {
+            plateControle.clearValidators();
+        } else {
+            plateControle.setValidators([Validators.required, Validators.minLength(3), Validators.maxLength(7)]);
+        }
+        plateControle.updateValueAndValidity();
     }
     onRemoveCar(car: Cars) {
         event.stopPropagation();
@@ -72,8 +100,13 @@ export class CarsListComponent implements OnInit, AfterViewInit {
             this.loadCars();
         });
     }
+    getPartsCost(parts) {
+        return parts.reduce((prev, next) => parseFloat(prev) + parseFloat(next.price), 0);
+    }
     sendAddingCar() {
-        this.carsService.addCar(this.carForm.value).subscribe(() => {
+        const carFormData = Object.assign({}, this.carForm.value);
+        carFormData.cost = this.getPartsCost(carFormData.parts);
+        this.carsService.addCar(carFormData).subscribe(() => {
             this.loadCars();
             this.carForm.reset();
         });
