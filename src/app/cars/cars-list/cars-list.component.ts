@@ -7,13 +7,14 @@ import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CostSharedService} from "../cost-shared.service";
 import {CarTableRowComponent} from "../car-table-row/car-table-row.component";
 import {PowerValidators} from "../../shared-module/validators/validators";
+import {CanDeactivateComponent} from "../../guards/can-deactivate.guard";
 @Component({
   selector: 'app-cars-list',
   templateUrl: './cars-list.component.html',
   styleUrls: ['./cars-list.component.less'],
   encapsulation: ViewEncapsulation.None
 })
-export class CarsListComponent implements OnInit, AfterViewInit {
+export class CarsListComponent implements OnInit, AfterViewInit, CanDeactivateComponent {
     @ViewChild('totalCostRef') totalCostRef: TotalCostComponent;
     @ViewChildren(CarTableRowComponent) carRows: QueryList<CarTableRowComponent>;
     totalCost: number;
@@ -110,6 +111,14 @@ export class CarsListComponent implements OnInit, AfterViewInit {
             this.loadCars();
             this.carForm.reset();
         });
+    }
+
+    // funkcje deaktywacyjne z interfaceu
+    canDeactivate() {
+        if (!this.carForm.dirty) {
+            return true;
+        }
+        return window.confirm('Porzucić zmiany ?');
     }
     ngOnInit() {
         this.loadCars();
