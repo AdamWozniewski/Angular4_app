@@ -1,13 +1,23 @@
-import {AfterViewInit, Component, OnInit, QueryList, ViewChild, ViewChildren, ViewEncapsulation} from '@angular/core';
+import {
+    AfterViewInit,
+    Component,
+    ElementRef,
+    OnInit,
+    QueryList,
+    Renderer2,
+    ViewChild,
+    ViewChildren,
+    ViewEncapsulation
+} from '@angular/core';
 import { Cars } from '../models/car';
 import { TotalCostComponent } from '../total-cost/total-cost.component';
 import { CarsServiceService } from '../cars-service.service';
 import { Router } from '@angular/router';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CostSharedService} from "../cost-shared.service";
-import {CarTableRowComponent} from "../car-table-row/car-table-row.component";
-import {PowerValidators} from "../../shared-module/validators/validators";
-import {CanDeactivateComponent} from "../../guards/can-deactivate.guard";
+import { CostSharedService } from '../cost-shared.service';
+import { CarTableRowComponent } from '../car-table-row/car-table-row.component';
+import { PowerValidators } from '../../shared-module/validators/validators';
+import { CanDeactivateComponent } from '../../guards/can-deactivate.guard';
 @Component({
   selector: 'app-cars-list',
   templateUrl: './cars-list.component.html',
@@ -17,6 +27,7 @@ import {CanDeactivateComponent} from "../../guards/can-deactivate.guard";
 export class CarsListComponent implements OnInit, AfterViewInit, CanDeactivateComponent {
     @ViewChild('totalCostRef') totalCostRef: TotalCostComponent;
     @ViewChildren(CarTableRowComponent) carRows: QueryList<CarTableRowComponent>;
+    @ViewChild('addCarTitle') addCarTitle: ElementRef;
     totalCost: number;
     grossShown: number;
     cars: Cars[] = [];
@@ -25,7 +36,8 @@ export class CarsListComponent implements OnInit, AfterViewInit, CanDeactivateCo
         private carsService: CarsServiceService,
         private costService: CostSharedService,
         private router: Router,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private renderer: Renderer2
     ) {
       // wykonywany jeszcze przed budowaniem komponentu, gdy nie ma wartosci
         console.log(carsService.random, '   CarsListComponent');
@@ -125,6 +137,16 @@ export class CarsListComponent implements OnInit, AfterViewInit, CanDeactivateCo
         this.carForm = this.buildCarForm();
     }
     ngAfterViewInit() {
+        const addCarTitle = this.addCarTitle.nativeElement;
+        this.carForm.valueChanges.subscribe(() => {
+            if (this.carForm.invalid) {
+                addCarTitle.style.color = 'red';
+                this.renderer.setStyle(addCarTitle, 'font-weight', '1000');
+            } else {
+                addCarTitle.style.color = 'white';
+                this.renderer.setStyle(addCarTitle, 'font-weight', '700');
+            }
+        });
         this.carRows.changes.subscribe(row => {
             if (this.carRows.first.car.clientSurname === 'Kowalski') {
                 console.log('kolejny w kolejce: Kowalski');

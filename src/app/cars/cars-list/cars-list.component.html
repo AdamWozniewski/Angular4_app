@@ -18,8 +18,13 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="row-car" *ngFor="let car of this.cars; let i = index" (click)="goToCar(car)"
-              app-car-table-row [car]="car" (removedCar)="this.onRemoveCar(car)"
+          <tr class="row-car"
+              *ngFor="let car of this.cars; let i = index"
+              (click)="goToCar(car)"
+
+              app-car-table-row
+              [car]="car"
+              (removedCar)="this.onRemoveCar(car)"
           >
           </tr>
         </tbody>
@@ -46,7 +51,7 @@
     </div>
   </div>
 
-  <p class="data-header">Dodaj Nowy samochod</p>
+  <p class="data-header" #addCarTitle>Dodaj Nowy samochod</p>
   <div class="data-container">
     <form [formGroup]="this.carForm">
       <div class="row form-group">
