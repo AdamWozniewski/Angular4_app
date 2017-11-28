@@ -1,4 +1,5 @@
 import {
+    AfterViewChecked,
     AfterViewInit,
     Component,
     ElementRef,
@@ -24,7 +25,7 @@ import { CanDeactivateComponent } from '../../guards/can-deactivate.guard';
   styleUrls: ['./cars-list.component.less'],
   encapsulation: ViewEncapsulation.None
 })
-export class CarsListComponent implements OnInit, AfterViewInit, CanDeactivateComponent {
+export class CarsListComponent implements OnInit, AfterViewChecked, AfterViewInit, CanDeactivateComponent {
     @ViewChild('totalCostRef') totalCostRef: TotalCostComponent;
     @ViewChildren(CarTableRowComponent) carRows: QueryList<CarTableRowComponent>;
     @ViewChild('addCarTitle') addCarTitle: ElementRef;
@@ -32,6 +33,7 @@ export class CarsListComponent implements OnInit, AfterViewInit, CanDeactivateCo
     grossShown: number;
     cars: Cars[] = [];
     carForm: FormGroup;
+    innerCounter: number = 0;
     constructor(
         private carsService: CarsServiceService,
         private costService: CostSharedService,
@@ -152,5 +154,9 @@ export class CarsListComponent implements OnInit, AfterViewInit, CanDeactivateCo
                 console.log('kolejny w kolejce: Kowalski');
             }
         });
+    }
+    ngAfterViewChecked() {
+        // this.innerCounter++; // śledzenie zdarzen
+        // console.log(this.innerCounter);
     }
 }

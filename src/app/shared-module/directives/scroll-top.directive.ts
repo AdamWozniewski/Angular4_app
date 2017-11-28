@@ -1,4 +1,11 @@
-import {Directive, ElementRef, HostBinding, HostListener, Inject, Renderer2} from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  HostBinding,
+  HostListener,
+  Inject,
+  Renderer2
+} from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 @Directive({
@@ -17,7 +24,7 @@ export class ScrollTopDirective {
     if (scrollPosition > this.scrollTreshold) {
       this.renderer.setStyle(this.hostElement.nativeElement, 'display', 'block');
     } else {
-        this.renderer.setStyle(this.hostElement.nativeElement, 'display', 'none');
+      this.renderer.setStyle(this.hostElement.nativeElement, 'display', 'none');
     }
   }
   constructor(private renderer: Renderer2,

@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {
+    Component, ComponentFactoryResolver, ComponentRef, OnInit, Type, ViewChild,
+    ViewContainerRef
+} from '@angular/core';
 import { CarsServiceService } from '../cars-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Cars } from '../models/car';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DateInfoComponent } from './date-info/date-info.component';
 
 @Component({
   selector: 'app-car-details',
@@ -10,18 +14,22 @@ import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
   styleUrls: ['./car-details.component.less']
 })
 export class CarDetailsComponent implements OnInit {
+  @ViewChild('dateInfoContainer', {read: ViewContainerRef}) dateInfoContainer: ViewContainerRef;
   car: Cars;
   carForm: FormGroup;
+  elapsedDays: number;
+  dateInfoRef;
   constructor(
-      private carsService: CarsServiceService,
-      private route: ActivatedRoute,
-      private formBuilder: FormBuilder,
-      private router: Router,
+    private carsService: CarsServiceService,
+    private route: ActivatedRoute,
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private componentFactoryResolver: ComponentFactoryResolver
   ) { }
   buildCarForm() {
     let parts = this.car.parts
-        ? this.car.parts.map(part => this.formBuilder.group(part))
-        : [];
+      ? this.car.parts.map(part => this.formBuilder.group(part))
+      : [];
     return this.formBuilder.group({
       model: [this.car.model, [Validators.required]],
       type: this.car.type,
@@ -62,6 +70,25 @@ export class CarDetailsComponent implements OnInit {
     this.carsService.updateCar(this.car.id, carFormData).subscribe(() => {
       this.router.navigate(['/cars']);
     });
+  }
+  createDateInfo() {
+    if (this.dateInfoContainer.get(0) !== null) {
+      return;
+    }
+    const dateInfoFactory = this.componentFactoryResolver
+        .resolveComponentFactory(<Type<DateInfoComponent>>DateInfoComponent);
+    this.dateInfoRef = <ComponentRef<DateInfoComponent>>this.dateInfoContainer
+      .createComponent(dateInfoFactory);
+    this.dateInfoRef.instance.carForDate = this.car;
+    this.dateInfoRef.instance.checkElapsedDate.subscribe((val) => {
+      this.elapsedDays = val;
+    });
+  }
+
+  clearDateInfoContainer() {
+    // this.dateInfoContainer.clear(); //metoda 1, wywala wszuytskoe
+    //   this.dateInfoContainer.remove(0) //metoda 2 wywala wybrany
+      this.dateInfoRef.destroy();
   }
   ngOnInit() {
     this.car = this.route.snapshot.data['car'];

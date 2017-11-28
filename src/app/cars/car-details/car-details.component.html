@@ -1,8 +1,18 @@
 <app-header>
   <p levels>Cars / {{this.car?.model}}</p>
-  <div content>Samochód</div>
+  <div content>Samochód
+    <span *ngIf="this.elapsedDays">| {{this.elapsedDays }} w serwisie</span>
+  </div>
 </app-header>
-
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <button (click)="this.createDateInfo()" class="btn btn-default">Pokaz informacje</button>
+      <button (click)="this.clearDateInfoContainer()" class="btn btn-primary">Ukryj informacje</button>
+    </div>
+  </div>
+</div>
+<ng-template #dateInfoContainer></ng-template>
 <p class="data-header">Edytuj Samochód</p>
 <div class="data-container">
   <form [formGroup]="this.carForm">

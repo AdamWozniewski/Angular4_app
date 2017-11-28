@@ -1,0 +1,11 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="date-box">
+        <span>Data samochodu: {{carForDate.deliveryDate | date:'shortDate'}}</span>
+        <span>Oddanie: {{carForDate.deadline | date:'shortDate'}}</span>
+        <button (click)="this.getElapsedDate()" class="btn btn-primary">Sprawdz różnicę dat</button>
+      </div>
+    </div>
+  </div>
+</div>
